@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import userApplication.Dto.UserDto;
 import userApplication.Entity.User;
 import userApplication.Service.UserService;
 
@@ -18,35 +19,35 @@ public class UserController {
 
     // build create User REST API
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user){
-        User savedUser = userService.createUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
+        UserDto savedUserDto = userService.createUser(userDto);
+        return new ResponseEntity<>(savedUserDto, HttpStatus.CREATED);
     }
 
     // build get user by id REST API
     // http://localhost:8080/api/users/1
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long userId){
-        User user = userService.getUserById(userId);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long userId){
+        UserDto userDto = userService.getUserById(userId);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     // Build Get All Users REST API
     // http://localhost:8080/api/users
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(){
-        List<User> users = userService.getAllUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+    public ResponseEntity<List<UserDto>> getAllUsers(){
+        List<UserDto> userDtoList = userService.getAllUsers();
+        return new ResponseEntity<>(userDtoList, HttpStatus.OK);
     }
 
     // Build Update User REST API
     @PutMapping("{id}")
     // http://localhost:8080/api/users/1
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long userId,
-                                           @RequestBody User user){
-        user.setId(userId);
-        User updatedUser = userService.updateUser(user);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long userId,
+                                           @RequestBody UserDto userDto){
+        userDto.setId(userId);
+        UserDto updatedUserDto = userService.updateUser(userDto);
+        return new ResponseEntity<>(updatedUserDto, HttpStatus.OK);
     }
 
     // Build Delete User REST API

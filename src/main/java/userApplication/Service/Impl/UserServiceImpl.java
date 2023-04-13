@@ -2,7 +2,9 @@ package userApplication.Service.Impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import userApplication.Dto.UserDto;
 import userApplication.Entity.User;
+import userApplication.Mapper.UserMapper;
 import userApplication.Repository.UserRepository;
 import userApplication.Service.UserService;
 
@@ -16,29 +18,39 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserDto createUser(UserDto userDto) {
+
+        User user = userRepository.save(UserMapper.mapper.mapToUser(userDto));
+        UserDto SavedUserDto = UserMapper.mapper.mapToUserDto(user);
+
+        return SavedUserDto;
     }
 
     @Override
-    public User getUserById(Long userId) {
+    public UserDto getUserById(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
-        return optionalUser.get();
+        UserDto userDto = UserMapper.mapper.mapToUserDto(optionalUser.get());
+        return userDto;
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        List<User> userList = userRepository.findAll();
+        List<UserDto> userDtoList = UserMapper.mapper.mapListToUserDto(userList);
+        return userDtoList;
     }
 
     @Override
-    public User updateUser(User user) {
-        User existingUser = userRepository.findById(user.getId()).get();
-        existingUser.setFirstName(user.getFirstName());
-        existingUser.setLastName(user.getLastName());
-        existingUser.setEmail(user.getEmail());
+    public UserDto updateUser(UserDto userDto) {
+
+        User existingUser = userRepository.findById(userDto.getId()).get();
+        existingUser.setFirstName(userDto.getFirstName());
+        existingUser.setLastName(userDto.getLastName());
+        existingUser.setEmail(userDto.getEmail());
         User updatedUser = userRepository.save(existingUser);
-        return updatedUser;
+
+        UserDto updatedUserDto = UserMapper.mapper.mapToUserDto(updatedUser);
+        return updatedUserDto;
     }
 
     @Override
